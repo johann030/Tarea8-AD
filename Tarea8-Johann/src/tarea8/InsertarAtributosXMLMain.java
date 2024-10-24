@@ -23,14 +23,25 @@ import org.w3c.dom.Element;
 public class InsertarAtributosXMLMain {
 
 	public static void main(String[] args) {
-		// TODO
 
 		Scanner sc = new Scanner(System.in);
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 		try {
-			Alumno leerAlumno[] = new Alumno[2];
+			Alumno leerAlumno[] = new Alumno[5];
+
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			DOMImplementation implementation = builder.getDOMImplementation();
+
+			Document document = implementation.createDocument(null, "Alumnos", null);
+			document.setXmlVersion("1.0");
+
+			Element alumnos = document.createElement("alumnos");
+
 			for (int i = 0; i < leerAlumno.length; i++) {
+				
+				Element alumno = document.createElement("alumno");
+				
 				System.out.println("Introduzca la Nia del alumno: ");
 				int niaAlumno = sc.nextInt();
 				sc.nextLine();
@@ -57,15 +68,6 @@ public class InsertarAtributosXMLMain {
 
 				System.out.println("Introduzca el grupo del alumno: ");
 				String grupoAlumno = sc.nextLine();
-
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				DOMImplementation implementation = builder.getDOMImplementation();
-
-				Document document = implementation.createDocument(null, "Alumnos", null);
-				document.setXmlVersion("1.0");
-
-				Element alumnos = document.createElement("alumnos");
-				Element alumno = document.createElement("alumno");
 
 				Attr nia = document.createAttribute("nia");
 				nia.setValue(niaAlumno + "J");
@@ -101,14 +103,14 @@ public class InsertarAtributosXMLMain {
 
 				alumnos.appendChild(alumno);
 
-				document.getDocumentElement().appendChild(alumnos);
-
-				Source source = new DOMSource(document);
-				Result result = new StreamResult(new File("alumnos.xml"));
-
-				Transformer transformer = TransformerFactory.newInstance().newTransformer();
-				transformer.transform(source, result);
 			}
+			document.getDocumentElement().appendChild(alumnos);
+
+			Source source = new DOMSource(document);
+			Result result = new StreamResult(new File("alumnosAtributos.xml"));
+
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.transform(source, result);
 		} catch (TransformerException a) {
 			a.printStackTrace();
 		} catch (ParserConfigurationException e) {
